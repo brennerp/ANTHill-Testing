@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+    <head>
+        <link href="css/main.css" rel="stylesheet" type="text/css"/>
+        
+        <script type='text/javascript' src='https://github.jspm.io/EightMedia/hammer.js@1.0.0/dist/hammer.js'> </script>
+        <script type='text/javascript' src='https://github.jspm.io/janesconference/KievII@0.6.0/kievII.js'> </script>
+        <script src="Flocking/dist/flocking-all.min.js"></script>
+        <script src="jQueryKnob.js"></script>
+        <script src = "js/three.min.js"></script>
+        <script src="js/backupAudioLucas.js"></script>
+        
+        <title>The Cube</title>
+    </head>
+    
+    <body style="margin: 0">
+
+    	 <script>
+			cubeSize = 25;
+			variation = 0;
+            rotation = 0;
+         </script>
+
+        <div id="All">
+            <h1 id="the">THE</h1>
+            <h1 id="cube">CUBE</h1>
+            <div id="3Dpart">
+             	 <script src = "js/TheCubeScript.js"></script> 
+            </div>
+            
+            
+        </div>
+        
+        <div id="Text">
+        	<p>Hi! This is a Flocking example</p>
+            
+            <canvas id="myCanvas" width="340" height="340"></canvas>
+           <script>
+
+		   		synth1 = audioLucas.first();
+				synth1.play();
+				
+				synth2 = audioLucas.bell();
+				synth2.play();
+				
+				//synth3 = audioLucas.third();
+				//synth3.play();
+				//audioLucas.synth.play();
+        	</script>
+        </div>
+
+        <script id="knob">
+
+            // Get your Canvas Element ID                   
+            var targetCanvas = document.getElementById("myCanvas");
+          
+            GaugeTest = {
+
+            name : 'GaugeTest',
+            ui : null,
+
+            main : function() {
+
+                // !VIEWABLEDOCSTART
+                gaugeArgs = {
+                    ID : "testGauge",
+                    left : Math.floor(this.viewWidth/4),
+                    top : Math.floor(this.viewHeight/4),
+                    height : this.viewHeight/2,
+                    width : this.viewWidth/2,
+                    onValueSet : function(slot, value) {
+                        console.log(value);
+                        synth1.set("carrier.freq", value*100);
+                        this.ui.refresh();
+                    }.bind(this),
+                    isListening : true
+                };
+
+                this.ui.addElement(new K2.Gauge(gaugeArgs));
+                this.ui.setValue({
+                    elementID : 'testGauge',
+                    slot : 'gaugevalue',
+                    value : 0.1
+                });
+                
+                this.ui.refresh();
+                //!VIEWABLEDOCEND
+            },
+
+            init : function(canvas) {
+
+                this.viewWidth = canvas.width;
+                this.viewHeight = canvas.height;
+
+                this.ui = new K2.UI({
+                    type : 'CANVAS2D',
+                    target : canvas
+                });
+
+                this.main();
+
+            }
+        }
+
+            GaugeTest.init(targetCanvas);
+            
+        </script>
+       
+    </body>
+</html>
