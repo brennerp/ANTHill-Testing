@@ -34,7 +34,7 @@
         <div id="Text">
         	<p>Hi! This is a Flocking example</p>
             
-            <canvas id="myCanvas" width="340" height="340"></canvas>
+            <canvas id="myCanvas" width="680" height="340"></canvas>
            <script>
 
 		   		synth1 = audioLucas.first();
@@ -54,7 +54,7 @@
             // Get your Canvas Element ID                   
             var targetCanvas = document.getElementById("myCanvas");
           
-            GaugeTest = {
+            var GaugeTest = {
 
             name : 'GaugeTest',
             ui : null,
@@ -62,26 +62,49 @@
             main : function() {
 
                 // !VIEWABLEDOCSTART
-                gaugeArgs = {
+                var gaugeArgs = {
                     ID : "testGauge",
-                    left : Math.floor(this.viewWidth/4),
+                    left : 0,
                     top : Math.floor(this.viewHeight/4),
-                    height : this.viewHeight/2,
-                    width : this.viewWidth/2,
-                    onValueSet : function(slot, value) {
-                        console.log(value);
-                        synth1.set("carrier.freq", value*100);
+                    height : this.viewHeight/8,
+                    width : this.viewWidth/8,
+                    /*onValueSet : function(slot, value) {
+                        console.log(this.elementID);
+                        if (gaugeArgs.ID == "testGauge0")
+                            synth1.set("carrier.freq", value*100);
                         this.ui.refresh();
-                    }.bind(this),
+                    }.bind(this),*/
                     isListening : true
                 };
 
+                gaugeArgs.ID = "testGauge0";
+                gaugeArgs.left = 5*Math.floor(this.viewWidth/8);
+                gaugeArgs.onValueSet = function(slot, value) {
+                    synth1.set("carrier.freq", value*100);
+                    this.ui.refresh();
+                }.bind(this);
                 this.ui.addElement(new K2.Gauge(gaugeArgs));
-                this.ui.setValue({
-                    elementID : 'testGauge',
-                    slot : 'gaugevalue',
-                    value : 0.1
+                this.ui.setValue ({
+                    elementID: gaugeArgs.ID,
+                    slot: "gaugevalue",
+                    value: 0.2
                 });
+
+                gaugeArgs.ID = "testGauge1";
+                gaugeArgs.left = Math.floor(this.viewWidth/8);
+                gaugeArgs.onValueSet = function(slot, value) {
+                    synth2.set("lefty.mul.freq", (value+1)*600);
+                    synth2.set("righty.mul.freq", (value+1)*600);
+                    this.ui.refresh();
+                }.bind(this);
+                this.ui.addElement(new K2.Gauge(gaugeArgs));
+                this.ui.setValue ({
+                    elementID: gaugeArgs.ID,
+                    slot: "gaugevalue",
+                    value: 0.1
+                });
+
+                
                 
                 this.ui.refresh();
                 //!VIEWABLEDOCEND
